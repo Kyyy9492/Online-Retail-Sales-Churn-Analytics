@@ -2,113 +2,83 @@
 
 ## Project Overview
 
-This project analyzes transaction-level online retail data to understand sales performance, customer value, product demand, and churn risk. The dataset contains two yearly worksheets, **2009–2010** and **2010–2011**, with more than one million invoice-line records.
+This project is an end-to-end retail analytics case study built on multi-year online retail transaction data. The goal is to transform raw invoice-level sales records into business-ready insights around **sales performance, customer segmentation, churn risk, product performance, and market contribution**.
 
-The final deliverables are designed to demonstrate a practical data analyst workflow:
+The project simulates a real data analyst / BI analyst workflow: raw Excel data is cleaned with Python, customer-level features are engineered, SQL queries are prepared for KPI analysis, and processed outputs are generated for dashboarding and business reporting.
 
-- Data cleaning and transaction validation
-- Sales KPI analysis
-- Customer segmentation using RFM
-- Churn / inactive-customer risk labeling
-- Cohort retention analysis
-- Market and product performance analysis
-- Dashboard-ready output tables
-- Optional predictive modeling for churn risk
+## Business Problem
+
+Online retailers often have large volumes of transaction data, but the raw data alone does not directly answer business questions such as:
+
+- Which months, countries, and products drive the most revenue?
+- Which customers are the most valuable?
+- Which customers are at risk of becoming inactive?
+- How should the business prioritize retention and reactivation campaigns?
+- Which processed datasets should be used for executive dashboards?
+
+This project addresses those questions by creating a structured analytics pipeline and dashboard-ready output tables.
 
 ## Dataset
 
-**Source file:** `online_retail_II.xlsx`
+The source data is an Online Retail II-style transaction dataset containing two yearly worksheets:
 
-Expected columns:
+| Sheet | Description |
+|---|---|
+| Year 2009-2010 | Invoice-level retail transactions |
+| Year 2010-2011 | Invoice-level retail transactions |
+
+Core fields include:
 
 | Column | Description |
 |---|---|
-| Invoice | Invoice ID; cancellation invoices usually start with `C` |
-| StockCode | Product code |
+| Invoice | Invoice number; cancelled invoices may start with `C` |
+| StockCode | Product identifier |
 | Description | Product description |
 | Quantity | Quantity purchased or returned |
 | InvoiceDate | Transaction timestamp |
 | Price | Unit price |
-| Customer ID | Customer identifier |
+| Customer ID | Unique customer identifier |
 | Country | Customer country |
 
-The workbook contains two sheets:
+The raw dataset contains more than **1 million transaction records** across two yearly sheets.
 
-| Sheet | Approximate Rows | Columns |
-|---|---:|---:|
-| Year 2009-2010 | 525,461 | 8 |
-| Year 2010-2011 | 541,910 | 8 |
+> Note: The raw Excel file is not included in this repository because of file size. The repository includes processed outputs generated from the analysis pipeline.
 
-## Business Questions
+## Tools Used
 
-This project answers the following business questions:
-
-1. **Sales Performance**
-   - What are the monthly revenue, order volume, and average order value trends?
-   - Which countries contribute the most revenue?
-   - Which products drive the most sales?
-
-2. **Customer Value**
-   - Who are the highest-value customers?
-   - How are customers distributed by recency, frequency, and monetary value?
-   - Which customer segments should be prioritized for retention or reactivation?
-
-3. **Churn / Inactivity Risk**
-   - Which customers are at risk of churn based on purchase recency?
-   - What customer behaviors are associated with higher churn risk?
-   - How much revenue is at risk from inactive customers?
-
-4. **Retention**
-   - How well does the business retain customers across monthly cohorts?
-   - Are newer customer cohorts becoming more or less valuable?
-
-5. **Operational Insights**
-   - Which products have high return/cancellation activity?
-   - Are there seasonal patterns in demand?
-   - Which countries or customer groups deserve targeted marketing?
-
-## Recommended Tech Stack
-
-| Layer | Tools |
+| Category | Tools |
 |---|---|
-| Data Processing | Python, pandas, numpy |
-| Database / Querying | SQLite or DuckDB, SQL |
-| Visualization | Power BI, Tableau, or Plotly |
-| Modeling | scikit-learn |
-| Documentation | GitHub README, Jupyter Notebook |
-| Optional App | Streamlit dashboard |
+| Programming | Python |
+| Data Processing | pandas, numpy |
+| Excel Reading | openpyxl |
+| SQL Analysis | SQL query templates |
+| Notebook Analysis | Jupyter Notebook |
+| BI / Dashboard Ready | Processed CSV outputs for Power BI or Tableau |
+| Version Control | GitHub |
 
 ## Project Structure
 
 ```text
-online-retail-sales-churn-analytics/
-│
-├── README.md
-├── requirements.txt
-├── .gitignore
+Online-Retail-Sales-Churn-Analytics/
 │
 ├── data/
-│   ├── raw/
-│   │   └── online_retail_II.xlsx
-│   ├── interim/
-│   │   └── cleaned_transactions.parquet
 │   └── processed/
-│       ├── monthly_sales_summary.csv
+│       ├── country_performance.csv
 │       ├── customer_rfm_segments.csv
-│       ├── customer_churn_labels.csv
-│       ├── cohort_retention_matrix.csv
-│       └── product_performance.csv
+│       ├── high_value_churn_risk_customers.csv
+│       ├── monthly_sales_summary.csv
+│       ├── product_performance_top200.csv
+│       └── segment_summary.csv
 │
 ├── notebooks/
-│   ├── 01_data_understanding.ipynb
-│   ├── 02_data_cleaning.ipynb
-│   ├── 03_sales_analysis.ipynb
-│   ├── 04_rfm_customer_segmentation.ipynb
-│   ├── 05_churn_risk_analysis.ipynb
-│   └── 06_cohort_retention_analysis.ipynb
+│   ├── 01_data_cleaning_and_eda.ipynb
+│   └── 02_rfm_churn_retention_analysis.ipynb
+│
+├── reports/
+│   ├── dashboard_build_guide.md
+│   └── executive_summary.md
 │
 ├── sql/
-│   ├── 01_create_tables.sql
 │   ├── 02_sales_kpis.sql
 │   ├── 03_customer_rfm.sql
 │   └── 04_churn_features.sql
@@ -117,299 +87,242 @@ online-retail-sales-churn-analytics/
 │   ├── data_cleaning.py
 │   ├── feature_engineering.py
 │   ├── rfm_segmentation.py
-│   ├── churn_labeling.py
+│   ├── run_pipeline.py
 │   └── visualization.py
 │
-├── dashboards/
-│   └── powerbi_dashboard_screenshots/
-│
-└── reports/
-    └── executive_summary.md
+├── PROJECT_PLAN.md
+├── NEXT_UPLOAD_NOTES.md
+├── README.md
+└── requirements.txt
 ```
 
-## Analysis Plan
+## Analysis Workflow
 
-### 1. Data Understanding
+### 1. Data Cleaning
 
-Key checks:
+The raw Excel workbook is cleaned and standardized before analysis.
 
-- Number of rows by year
-- Missing values by column
-- Duplicate invoice lines
-- Negative quantities
-- Zero or negative prices
-- Cancellation invoices
-- Date range
-- Number of unique customers, invoices, products, and countries
+Main cleaning steps:
 
-Suggested outputs:
+- Combined two yearly worksheets into one transaction table
+- Standardized column names for easier analysis
+- Converted invoice dates into datetime format
+- Created revenue calculation: `quantity × unit price`
+- Flagged cancelled or returned transactions
+- Removed invalid records for sales KPI calculations
+- Preserved relevant transaction details for product, customer, and country analysis
 
-- Data dictionary
-- Data quality summary table
-- Initial exploratory charts
+### 2. Sales KPI Analysis
 
-### 2. Data Cleaning
+The project generates sales performance outputs such as:
 
-Cleaning rules:
-
-- Combine both yearly worksheets into one transaction table
-- Standardize column names:
-  - `Invoice` → `invoice_no`
-  - `StockCode` → `stock_code`
-  - `Description` → `description`
-  - `Quantity` → `quantity`
-  - `InvoiceDate` → `invoice_date`
-  - `Price` → `unit_price`
-  - `Customer ID` → `customer_id`
-  - `Country` → `country`
-- Convert invoice date to datetime
-- Create `revenue = quantity * unit_price`
-- Separate cancelled / returned transactions
-- Remove rows with missing `customer_id` for customer-level analysis
-- Keep cancellation records for return-rate analysis
-- Filter out invalid prices and quantities when calculating net sales
-
-Suggested derived columns:
-
-| Column | Logic |
-|---|---|
-| revenue | `quantity * unit_price` |
-| invoice_month | Month of invoice date |
-| invoice_date_only | Date without timestamp |
-| is_cancelled | Invoice starts with `C` or quantity < 0 |
-| year_month | Monthly period |
-| order_value | Sum of revenue per invoice |
-| customer_first_purchase_month | First purchase month by customer |
-
-### 3. Sales KPI Analysis
-
-Core metrics:
-
-- Total revenue
-- Monthly revenue
-- Number of orders
-- Number of active customers
+- Monthly revenue trend
+- Order volume
+- Active customer count
 - Average order value
-- Average basket size
 - Revenue by country
 - Revenue by product
-- Return / cancellation rate
+- Product quantity performance
 
-Visuals:
+Generated output:
 
-- Monthly revenue trend
-- Orders and active customers by month
-- Top 10 countries by revenue
-- Top 10 products by revenue
-- Revenue seasonality heatmap
+```text
+data/processed/monthly_sales_summary.csv
+```
 
-### 4. RFM Customer Segmentation
+### 3. Customer RFM Segmentation
 
-Use a snapshot date after the last transaction date.
+Customers are segmented using the RFM framework:
 
-RFM features:
-
-| Feature | Meaning |
+| Metric | Meaning |
 |---|---|
-| Recency | Days since last purchase |
-| Frequency | Number of unique invoices |
-| Monetary | Total customer revenue |
+| Recency | How recently a customer purchased |
+| Frequency | How often a customer purchased |
+| Monetary | How much revenue a customer generated |
 
-Segmentation logic:
+The segmentation helps identify customer groups such as:
 
-- Score each customer from 1 to 5 for Recency, Frequency, and Monetary
-- Combine into RFM score
-- Assign business segments:
-  - Champions
-  - Loyal Customers
-  - Potential Loyalists
-  - New Customers
-  - At Risk
-  - Cannot Lose
-  - Hibernating
-  - Lost
+- Champions
+- Loyal Customers
+- Potential Loyalists
+- At Risk
+- Hibernating
+- Lost Customers
 
-Suggested outputs:
+Generated outputs:
 
-- Customer-level RFM table
-- Segment distribution
-- Revenue contribution by segment
-- Recommended action by segment
+```text
+data/processed/customer_rfm_segments.csv
+data/processed/segment_summary.csv
+```
 
-### 5. Churn Risk Labeling
+### 4. Churn Risk Analysis
 
-Since this is transaction data and not subscription data, define churn as inactivity.
+Because this is transaction data rather than subscription data, churn risk is defined using customer inactivity.
 
-Recommended churn definition:
+The project labels customers as higher churn risk when they have not purchased within a defined recent activity window. It also identifies high-value inactive customers who may be good targets for reactivation campaigns.
 
-> A customer is considered churned or inactive if they have not purchased in the last **90 days** before the analysis snapshot date.
+Generated output:
 
-Alternative thresholds:
+```text
+data/processed/high_value_churn_risk_customers.csv
+```
 
-- 60 days: stricter, more aggressive retention
-- 90 days: balanced
-- 180 days: conservative
+### 5. Country and Product Performance
 
-Features for churn analysis:
+The project also produces market-level and product-level performance summaries.
 
-| Feature | Description |
+Generated outputs:
+
+```text
+data/processed/country_performance.csv
+data/processed/product_performance_top200.csv
+```
+
+## Key Outputs
+
+| Output File | Purpose |
 |---|---|
-| recency_days | Days since last purchase |
-| frequency | Number of orders |
-| monetary | Total revenue |
-| avg_order_value | Average revenue per order |
-| customer_lifetime_days | Days between first and last purchase |
-| return_rate | Share of returned/cancelled order lines |
-| country | Customer country |
-| unique_products | Number of unique products purchased |
-| active_months | Number of months with at least one purchase |
+| `monthly_sales_summary.csv` | Monthly revenue, orders, customers, and sales KPIs |
+| `customer_rfm_segments.csv` | Customer-level RFM scores and customer segments |
+| `segment_summary.csv` | Segment-level customer count, revenue, and business value |
+| `high_value_churn_risk_customers.csv` | High-value inactive customers for retention targeting |
+| `country_performance.csv` | Country-level revenue and customer performance |
+| `product_performance_top200.csv` | Top product performance by revenue and quantity |
 
-Possible outputs:
+## Business Recommendations
 
-- Churn risk table
-- Churn rate by country
-- Churn rate by RFM segment
-- Revenue at risk
-- Optional classification model: logistic regression, random forest, or XGBoost
+Based on the analysis design, the business can use this project to support the following decisions:
 
-### 6. Cohort Retention Analysis
+### 1. Prioritize high-value inactive customers
 
-Cohort logic:
+Customers with strong historical monetary value but long purchase recency should be targeted with reactivation campaigns, loyalty offers, or personalized promotions.
 
-- Define each customer’s cohort month as their first purchase month
-- Track whether the customer returned in later months
-- Calculate retention rate by cohort month and months since first purchase
+### 2. Build retention strategies by RFM segment
 
-Suggested output:
+Different customer groups require different actions:
 
-- Cohort retention matrix
-- Cohort heatmap
-- Interpretation of best and worst retention periods
+| Segment Type | Suggested Action |
+|---|---|
+| Champions | Loyalty rewards, early access, VIP campaigns |
+| Loyal Customers | Cross-sell and upsell campaigns |
+| Potential Loyalists | Welcome series and repeat-purchase incentives |
+| At Risk | Win-back campaigns |
+| Hibernating / Lost | Low-cost reactivation or suppression strategy |
 
-### 7. Product and Market Analysis
+### 3. Monitor country-level performance
 
-Product analysis:
+Country-level sales and customer summaries can help guide market prioritization, regional marketing allocation, and localized campaign planning.
 
-- Top products by revenue
-- Top products by quantity
-- Products with high cancellation/return count
-- Products with stable repeat demand
+### 4. Track product performance and return risk
 
-Country analysis:
+Top-selling products should be monitored for demand trends, while products with unusual cancellation or return behavior should be reviewed for pricing, description accuracy, or quality issues.
 
-- Revenue by country
-- Customers by country
-- Average order value by country
-- Churn risk by country
+## How to Run This Project Locally
 
-## Dashboard Design
+### 1. Clone or download this repository
 
-Recommended Power BI dashboard pages:
+```bash
+git clone <repository-url>
+cd Online-Retail-Sales-Churn-Analytics
+```
 
-### Page 1: Executive Overview
+### 2. Create a virtual environment
 
-KPIs:
+```bash
+python -m venv .venv
+```
+
+Activate it on Windows:
+
+```bash
+.venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Add the raw dataset locally
+
+Place the raw Excel file here:
+
+```text
+data/raw/online_retail_II.xlsx
+```
+
+### 5. Run the pipeline
+
+```bash
+python src/run_pipeline.py
+```
+
+Processed outputs will be saved to:
+
+```text
+data/processed/
+```
+
+## Dashboard Plan
+
+The processed CSVs are designed to support a Power BI or Tableau dashboard with the following pages:
+
+### Executive Overview
 
 - Total revenue
-- Total orders
+- Monthly revenue trend
+- Order volume
 - Active customers
 - Average order value
-- Return rate
-- Churn / inactive customer rate
 
-Charts:
+### Customer Segmentation
 
-- Monthly revenue trend
+- RFM segment distribution
+- Revenue by customer segment
+- High-value customer table
+
+### Churn Risk
+
+- High-value inactive customers
+- Churn-risk customer count by segment
+- Revenue at risk
+
+### Market and Product Performance
+
 - Revenue by country
-- Top products
-- Customer segment distribution
+- Top products by revenue
+- Product demand and quantity ranking
 
-### Page 2: Customer Segmentation
+## Skills Demonstrated
 
-Charts:
+- Python data cleaning and transformation
+- Feature engineering for customer analytics
+- RFM segmentation
+- Churn-risk labeling
+- Sales KPI development
+- SQL-based analytical thinking
+- Dashboard-ready data modeling
+- GitHub project documentation
+- Business insight communication
 
-- RFM segment counts
-- Revenue by RFM segment
-- Recency vs monetary scatter plot
-- Segment action table
+## Resume Highlights
 
-### Page 3: Churn Risk
+Potential resume bullets based on this project:
 
-Charts:
+- Built an end-to-end retail analytics project using Python, SQL, and dashboard-ready CSV outputs on 1M+ transaction records to analyze sales trends, customer segmentation, and churn risk.
+- Cleaned and transformed multi-year invoice-level retail data, handling cancellation records, invalid transactions, missing customer identifiers, and revenue feature engineering.
+- Developed RFM-based customer segmentation to identify high-value, loyal, at-risk, and inactive customer groups for targeted retention strategy.
+- Generated processed KPI datasets covering monthly sales, country performance, product performance, segment summaries, and high-value churn-risk customers.
+- Designed a BI-ready analytics pipeline and documentation structure suitable for Power BI or Tableau dashboard development.
 
-- Churn risk distribution
-- Revenue at risk by segment
-- Churn risk by country
-- Top high-value inactive customers
+## Next Improvements
 
-### Page 4: Retention
+Planned enhancements:
 
-Charts:
-
-- Cohort retention heatmap
-- Repeat purchase rate trend
-- Active customers by month
-
-## GitHub Deliverables
-
-Minimum version:
-
-- `README.md`
-- One clean notebook: `online_retail_analysis.ipynb`
-- Cleaned dataset sample or generated processed CSVs
-- Dashboard screenshots
-- Executive summary
-
-Strong version:
-
-- Modular Python scripts in `src/`
-- SQL KPI queries
-- Power BI dashboard screenshots
-- RFM segmentation output
-- Churn analysis output
-- Final business recommendations
-
-## Suggested Timeline
-
-| Phase | Work | Estimated Output |
-|---|---|---|
-| Phase 1 | Data understanding and cleaning | Clean transaction table |
-| Phase 2 | Sales KPI analysis | Monthly/country/product KPI tables |
-| Phase 3 | RFM segmentation | Customer segment table |
-| Phase 4 | Churn labeling | Customer churn risk table |
-| Phase 5 | Retention analysis | Cohort retention matrix |
-| Phase 6 | Dashboard | Power BI or Plotly dashboard |
-| Phase 7 | Documentation | README and executive summary |
-
-## Resume Bullets
-
-Possible resume bullets:
-
-- Built an end-to-end retail analytics project using Python, SQL, and Power BI on 1M+ transaction records to analyze sales trends, customer behavior, and churn risk.
-- Cleaned and transformed multi-year invoice-level retail data, handling missing customer IDs, cancellation invoices, negative quantities, and invalid price records to create analysis-ready datasets.
-- Developed RFM-based customer segmentation to identify high-value, loyal, at-risk, and inactive customer groups, supporting targeted retention strategies.
-- Designed churn-risk labels using customer inactivity windows and engineered behavioral features including recency, frequency, monetary value, return rate, and average order value.
-- Created dashboard-ready KPI tables and visualizations covering monthly revenue, average order value, customer retention, product performance, and country-level sales contribution.
-
-## Final Business Recommendations Template
-
-Use this section after analysis is complete:
-
-1. **Retain high-value inactive customers**
-   - Focus on customers with high monetary value but long recency.
-   - Offer targeted reactivation campaigns.
-
-2. **Prioritize champion and loyal customers**
-   - Build loyalty rewards or early-access promotions.
-   - Encourage repeat purchases from high-frequency customers.
-
-3. **Investigate high-return products**
-   - Review product descriptions, quality, and shipping issues.
-   - Reduce return-related revenue leakage.
-
-4. **Expand high-performing markets**
-   - Identify countries with strong revenue and high average order value.
-   - Prioritize localized marketing for these regions.
-
-5. **Monitor monthly retention**
-   - Use cohort retention dashboards to detect declining repeat purchase behavior early.
+- Add Power BI dashboard screenshots
+- Add cohort retention heatmap
+- Add churn prediction model with logistic regression or random forest
+- Add automated data validation checks
+- Add executive summary with finalized business findings
