@@ -181,6 +181,15 @@ data/processed/product_performance_top200.csv
 
 ## Key Outputs
 
+| Output File | Purpose |
+|---|---|
+| `monthly_sales_summary.csv` | Monthly revenue, orders, customers, and sales KPIs |
+| `customer_rfm_segments.csv` | Customer-level RFM scores and customer segments |
+| `segment_summary.csv` | Segment-level customer count, revenue, and business value |
+| `high_value_churn_risk_customers.csv` | High-value inactive customers for retention targeting |
+| `country_performance.csv` | Country-level revenue and customer performance |
+| `product_performance_top200.csv` | Top product performance by revenue and quantity |
+
 ## Visual Results
 
 ### Monthly Revenue Trend
@@ -191,24 +200,21 @@ Revenue shows strong seasonal peaks near year-end periods, suggesting holiday-dr
 
 ### Top Countries by Revenue
 
+The United Kingdom dominates total revenue, while other countries contribute smaller but useful international market opportunities.
+
 ![Top Countries by Revenue](reports/figures/top_countries_revenue.png)
 
 ### RFM Segment Distribution
+
+The RFM segmentation separates customers into actionable groups, helping prioritize loyalty, reactivation, and low-cost win-back strategies.
 
 ![RFM Segment Distribution](reports/figures/rfm_segment_distribution.png)
 
 ### Revenue Contribution by Customer Segment
 
-![Revenue Contribution by Customer Segment](reports/figures/segment_revenue_contribution.png)
+Revenue contribution by segment helps identify which customer groups generate the most business value and should receive higher retention priority.
 
-| Output File | Purpose |
-|---|---|
-| `monthly_sales_summary.csv` | Monthly revenue, orders, customers, and sales KPIs |
-| `customer_rfm_segments.csv` | Customer-level RFM scores and customer segments |
-| `segment_summary.csv` | Segment-level customer count, revenue, and business value |
-| `high_value_churn_risk_customers.csv` | High-value inactive customers for retention targeting |
-| `country_performance.csv` | Country-level revenue and customer performance |
-| `product_performance_top200.csv` | Top product performance by revenue and quantity |
+![Revenue Contribution by Customer Segment](reports/figures/segment_revenue_contribution.png)
 
 ## Business Recommendations
 
