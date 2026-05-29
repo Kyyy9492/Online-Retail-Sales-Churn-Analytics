@@ -317,6 +317,24 @@ Potential resume bullets based on this project:
 - Generated processed KPI datasets covering monthly sales, country performance, product performance, segment summaries, and high-value churn-risk customers.
 - Designed a BI-ready analytics pipeline and documentation structure suitable for Power BI or Tableau dashboard development.
 
+## Visual Results
+
+### Monthly Revenue Trend
+
+![Monthly Revenue Trend](reports/figures/monthly_revenue_trend.png)
+
+### Top Countries by Revenue
+
+![Top Countries by Revenue](reports/figures/top_countries_revenue.png)
+
+### RFM Segment Distribution
+
+![RFM Segment Distribution](reports/figures/rfm_segment_distribution.png)
+
+### Revenue Contribution by Customer Segment
+
+![Revenue Contribution by Customer Segment](reports/figures/segment_revenue_contribution.png)
+
 ## Next Improvements
 
 Planned enhancements:
